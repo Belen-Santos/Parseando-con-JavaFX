@@ -1,4 +1,3 @@
-package pasarImagenes;
 
 import java.io.Serializable;
 

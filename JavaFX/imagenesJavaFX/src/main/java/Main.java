@@ -1,6 +1,6 @@
-package pasarImagenes;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -34,7 +34,7 @@ public class Main extends Application {
 	private List<Noticia> noticias = new ArrayList<Noticia>();
 	private int i = -1;
 	// modifico a 6 el número de elementos del array, ya que meteré 6 imágenes
-	private Image[] aImg = new Image[6];
+	private List<Image> listaImagenes = new ArrayList<Image>();
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
@@ -43,27 +43,17 @@ public class Main extends Application {
 		root.setPadding(new Insets(10));
 		ImageView selectedImage = new ImageView();
 		// meto 6 imágenes, una por cada noticia
-		Image imagen1 = new Image(new FileInputStream(
-				"C:\\Users\\te_l\\Desktop\\WORKSPACE\\javaFX\\src\\pasarImagenes\\imagenes\\Perro.jpg"));
-		Image imagen2 = new Image(new FileInputStream(
-				"C:\\Users\\te_l\\Desktop\\WORKSPACE\\javaFX\\src\\pasarImagenes\\imagenes\\gato.jpeg"));
-		Image imagen3 = new Image(new FileInputStream(
-				"C:\\Users\\te_l\\Desktop\\WORKSPACE\\javaFX\\src\\pasarImagenes\\imagenes\\orangutan.jpg"));
-		Image imagen4 = new Image(new FileInputStream(
-				"C:\\Users\\te_l\\Desktop\\WORKSPACE\\javaFX\\src\\pasarImagenes\\imagenes\\tortuga.jpg"));
-		Image imagen5 = new Image(new FileInputStream(
-				"C:\\Users\\te_l\\Desktop\\WORKSPACE\\javaFX\\src\\pasarImagenes\\imagenes\\panda.jpg"));
-		Image imagen6 = new Image(new FileInputStream(
-				"C:\\Users\\te_l\\Desktop\\WORKSPACE\\javaFX\\src\\pasarImagenes\\imagenes\\otra.png"));
+		File directorioResources = new File("src\\main\\resources");
+
+		for (final File f : directorioResources.listFiles()) {
+			Image imagen = new Image(new FileInputStream(f.getAbsolutePath()));
+			listaImagenes.add(imagen);
+		}
+
 		// establezco un tamaño definido para todas las fotos
 		selectedImage.setFitHeight(350);
 		selectedImage.setFitWidth(750);
-		aImg[0] = imagen1;
-		aImg[1] = imagen2;
-		aImg[2] = imagen3;
-		aImg[3] = imagen4;
-		aImg[4] = imagen5;
-		aImg[5] = imagen6;
+
 		Button boton = new Button();
 		boton.setText("Siguiente");
 		// modifico el texto a salir
@@ -74,20 +64,13 @@ public class Main extends Application {
 		t.setFill(Color.RED);
 		boton.setOnAction(event -> {
 			i++;
-			if (i < 6) {
+			if (i < listaImagenes.size()) {
 				// paso a mayúsculas los títulos
 				String st = noticias.get(i).getTitle().toUpperCase();
 				t.setText(st);
 				System.out.println("Title " + i + ": " + st);
-				if (i < aImg.length && aImg[i] != null) {
-					selectedImage.setImage(aImg[i]);
-					/*
-					 * Comento esta parte de tu código ya que en mi programa, una vez que incluye la
-					 * imágen, no me interesa que en la siguiente noticia lo elimine --------------
-					 * if (!root.getChildren().contains(selectedImage)) {
-					 * root.getChildren().add(selectedImage); } else {
-					 * root.getChildren().remove(selectedImage); }
-					 */
+				if (i < listaImagenes.size() && listaImagenes.get(i) != null) {
+					selectedImage.setImage(listaImagenes.get(i));
 				}
 			} else {
 				System.out.println("R E C O M E N Z A M O S ");
